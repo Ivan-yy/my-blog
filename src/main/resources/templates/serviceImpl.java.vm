@@ -1,0 +1,42 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xh.marketplatform.common.entity.PageDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * @author ${author}
+ * @since ${date}
+ * @version ${version}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+        private Logger logger = LoggerFactory.getLogger(getClass());
+
+        @Autowired
+        private ${table.mapperName} ${table.entityPath}Mapper;
+
+        @Override
+        public IPage<${entity}> list(PageDto<${entity}> pageDto) {
+
+        LambdaQueryWrapper<${entity}> queryWrapper = Wrappers.lambdaQuery();
+##        queryWrapper.eq(SysLog::getCity,pageDto.getRequestDto().getCity());
+        return ${table.entityPath}Mapper.selectPage(pageDto, queryWrapper);
+        }
+}
+#end
